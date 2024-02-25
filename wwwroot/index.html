@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Books</title>
+    <style>
+        .crud-form {
+            width: 800px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 4fr;
+            grid-template-rows: auto;
+            gap: 10px;
+        }
+
+            .crud-form label {
+            }
+
+            .crud-form input {
+            }
+
+            .crud-form button {
+                grid-column: span 2;
+                cursor: pointer;
+            }
+
+        #BookList {
+            display: flex;
+            flex-wrap:wrap;
+            gap: 5px;
+        }
+
+        .book-info {
+            background-color: lightgray;
+            height: 210px;
+            width: 220px;
+            display: grid;
+            grid-template: repeat(2,1fr)/auto 1fr;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        button{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Books Database</h1>
+        <p>
+            We got all the books!
+        </p>
+        <h2>Create a Book:</h2>
+        <form class="crud-form" id="BookForm" data-operation="createBook">
+            <label for="Name">Book Name </label><input type="text" name="Name" required />
+            <label for="Category">Category</label><input type="text" name="Category" required />
+            <label for="Author">Author</label><input type="text" name="Author" required />
+            <label for="Price">Price</label><input type="number" min="0" step="0.1" name="Price" required />
+            <label for="Color">Color</label><input type="text" name="Color" required />
+            <button type="submit" id="CoolButton">Press to Create</button>
+        </form>
+        <hr />
+        <h2>Book List</h2>
+
+        <section id="BookList">
+        </section>
+        <hr />
+    </main>
+    <script>
+
+        document.addEventListener("submit", (e) => {
+
+            let source = e.target;
+
+            let operation = source.dataset.operation;
+
+            if (operations[operation]) {
+                e.preventDefault();
+                operations[operation](source);
+            }
+        });
+
+        document.addEventListener("click", (e) => {
+            let source = e.target;
+
+            let operation = source.dataset.operation;
+
+            let bookId = source.dataset.bookid;
+
+            operations[operation]?.(bookId);
+
+        });
+
+
+
+        const operations = {};
+
+        operations.deleteBook = async (bookId) => {
+
+            const options = {
+                method: "DELETE"
+            };
+            let request = await fetch(`api/books/${bookId}`, options);
+
+            let response = await request.status;
+
+            console.log(response);
+
+            getBooks();
+        };
+
+
+        operations.createBook = async (source) => {
+            if (!source instanceof HTMLFormElement) return false;
+
+            let formData = new FormData(source);
+            let newBook = Object.fromEntries(formData.entries());
+
+            let options = {
+                method: "POST",
+                body: JSON.stringify(newBook),
+                headers: {
+                    "content-type": "application/json"
+                }
+            };
+
+            let request = await fetch("/api/Books", options);
+            let result = await request.json();
+
+            console.log(result);
+
+            getBooks();
+        }
+
+        async function getBooks() {
+            let books = await fetch("api/Books");
+            books = await books.json();
+
+            if (books.length > 0) {
+                renderBooks(books)
+            } else {
+                console.log("No Books Found");
+            }
+        }
+
+        function renderBooks(books) {
+            let bookList = document.querySelector("#BookList");
+            bookList.innerHTML = "";
+
+            const money = x => new Number(x).toFixed(2);
+
+            books.forEach((book) => {
+
+                let template = `
+                                    <article class="book-info">
+                                        <strong>Book Name: </strong><em>${book.Name}</em>
+                                        <strong>Author: </strong><em>${book.Author}</em>
+                                        <strong>Category: </strong><em>${book.Category}</em>
+                                    	<strong>Price: </strong><em>&dollar;${money(book.Price)}</em>
+                                    	<strong>Color: <strong><em>${book.Color}</em>
+                                        <button data-operation="deleteBook" data-bookid="${book.Id}">DELETE</button>
+                                    <article>
+                                    `;
+                bookList.insertAdjacentHTML("beforeend", template);
+            }); 
+        }
+
+        getBooks();
+    </script>
+</body>
+</html>

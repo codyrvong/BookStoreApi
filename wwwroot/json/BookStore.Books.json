@@ -1,0 +1,30 @@
+[{
+  "_id": {
+    "$oid": "653dcbd873d6cd2acfe92492"
+  },
+  "Name": "Design Patterns",
+  "Price": 54.93,
+  "Category": "Computers",
+  "Author": "Ralph Johnson",
+  "Color": "Blue"
+},
+{
+  "_id": {
+    "$oid": "61a6058e6c43f32854e51f52"
+  },
+  "Name": "Clean Code",
+  "Price": 43.15,
+  "Category": "Computers",
+  "Author": "Robert C. Martin",
+  "Color": "Red"
+},
+{
+  "_id": {
+    "$oid": "65407d20e2edf772f106b47d"
+  },
+  "Name": "Cody Vong",
+  "Price": 94.5,
+  "Category": "Autobiography",
+  "Author": "Cody Vong",
+  "Color": "Black"
+}]

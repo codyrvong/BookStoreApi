@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "657826e9dac298d1264c1d64"
+  },
+  "Name": "bob",
+  "Budget": 29.99,
+  "Completed": true,
+  "Items": [
+    {
+      "Name": "Apple",
+      "Price": 34.56,
+      "Selected": false,
+      "Description": "A delicious, healthy apple."
+    },
+    {
+      "Name": "Apple",
+      "Price": 34.56,
+      "Selected": false,
+      "Description": "A delicious, healthy apple."
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "65782b1b99776c9f3b5ec502"
+  },
+  "Name": "Friday Walmart List",
+  "Budget": "99",
+  "Completed": false,
+  "Items": [
+    {
+      "_id": null,
+      "Name": "Banana",
+      "Price": "2",
+      "Selected": false,
+      "Description": "A bunch of bananas"
+    },
+    {
+      "_id": null,
+      "Name": "Steak Sauce",
+      "Price": "3",
+      "Selected": false,
+      "Description": "Expensive sauce that gives you heartburn!"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6578cfadd66c3011f415065f"
+  },
+  "Name": "December 12 2023 List",
+  "Budget": "376",
+  "Completed": false,
+  "Items": [
+    {
+      "_id": null,
+      "Name": "Pears",
+      "Price": "3",
+      "Selected": false,
+      "Description": "Fire fruits ong"
+    },
+    {
+      "_id": null,
+      "Name": "Steak",
+      "Price": "8",
+      "Selected": false,
+      "Description": "Protein packing yuh"
+    }
+  ]
+}]

@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Lists</title>
+    <style>
+        input, select {
+            width: 70%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .item-details {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #itemFields {
+            display: none;
+        }
+
+        #nextButton {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Shopping Lists</h1>
+        <p>
+            Wanna organize what you buy?
+        </p>
+        <h2>
+            Create a Shopping List:
+        </h2>
+        <!-- Shopping List Information -->
+        <label for="listName">Shopping List Name:</label>
+        <input type="text" id="listName" placeholder="Enter list name">
+
+        <label for="budget">Budget:</label>
+        <input type="number" id="budget" placeholder="Enter budget">
+
+        <button id="nextButton" onclick="showItemFields()">Next</button>
+
+        <div id="itemFields">
+            <!-- Add Item Form -->
+            <label for="itemName">Item Name:</label>
+            <input type="text" id="itemName" placeholder="Enter item name">
+
+            <label for="itemDescription">Item Description:</label>
+            <input type="text" id="itemDescription" placeholder="Enter item description">
+
+            <label for="itemPrice">Item Price:</label>
+            <input type="number" id="itemPrice" placeholder="Enter item price">
+
+            <button onclick="addItem()">Add Item</button>
+        </div>
+
+        <div>
+            <label for="sort">Sort:</label>
+            <select id="sort" onchange="sortLists()">
+                <option value="all">All Lists</option>
+                <option value="complete">Complete Lists</option>
+                <option value="incomplete">Incomplete Lists</option>
+            </select>
+        </div>
+
+        <ul id="list"></ul>
+    </div>
+
+    <script>
+        function showItemFields() {
+            var listName = document.getElementById('listName').value;
+            var budget = document.getElementById('budget').value;
+            var nextButton = document.getElementById('nextButton');
+            var itemFields = document.getElementById('itemFields');
+
+            if (listName.trim() !== '' && budget.trim() !== '') {
+                nextButton.style.display = 'none';
+                itemFields.style.display = 'block';
+            }
+        }
+
+        function addItem() {
+            var listName = document.getElementById('listName').value;
+            var budget = document.getElementById('budget').value;
+            var itemName = document.getElementById('itemName').value;
+            var itemDescription = document.getElementById('itemDescription').value;
+            var itemPrice = document.getElementById('itemPrice').value;
+            var itemList = document.getElementById('list');
+
+            if (listName.trim() === '' || budget.trim() === '' || itemName.trim() === '' || itemDescription.trim() === '' || itemPrice.trim() === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            var listItem = document.createElement('li');
+            listItem.innerHTML = `
+                                        <div>
+                                            <strong>List:</strong> ${listName} - $${budget}
+                                        </div>
+                                        <div class="item-details">
+                                            <span>${itemName} - ${itemDescription}</span>
+                                            <span>$${itemPrice}</span>
+                                        </div>
+                                        <button onclick="removeItem(this)">Remove</button>
+                                    `;
+
+            listItem.setAttribute('data-budget', budget);
+            itemList.appendChild(listItem);
+
+            // Clear input fields
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemDescription').value = '';
+            document.getElementById('itemPrice').value = '';
+
+            // Show the "Next" button again
+            document.getElementById('nextButton').style.display = 'block';
+        }
+
+        function removeItem(button) {
+            var item = button.parentNode;
+            item.parentNode.removeChild(item);
+        }
+
+        // Show item fields when listName and budget are filled
+        document.getElementById('listName').addEventListener('input', toggleItemFields);
+        document.getElementById('budget').addEventListener('input', toggleItemFields);
+
+        function toggleItemFields() {
+            var listName = document.getElementById('listName').value;
+            var budget = document.getElementById('budget').value;
+            var itemFields = document.getElementById('itemFields');
+            var nextButton = document.getElementById('nextButton');
+
+            if (listName.trim() !== '' && budget.trim() !== '') {
+                nextButton.style.display = 'block';
+                itemFields.style.display = 'none';
+            } else {
+                nextButton.style.display = 'none';
+                itemFields.style.display = 'none';
+            }
+        }
+
+        // Sorting function
+        function sortLists() {
+            var sortType = document.getElementById('sort').value;
+            var items = document.getElementById('list').getElementsByTagName('li');
+
+            for (var i = 0; i < items.length; i++) {
+                var budget = parseFloat(items[i].getAttribute('data-budget'));
+                if (sortType === 'incomplete' && budget > 0) {
+                    items[i].style.display = 'none';
+                } else if (sortType === 'complete' && budget <= 0) {
+                    items[i].style.display = 'none';
+                } else {
+                    items[i].style.display = 'flex';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
